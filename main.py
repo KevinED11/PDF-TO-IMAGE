@@ -1,12 +1,24 @@
 from pdf2image import convert_from_path
 from enum import StrEnum, IntEnum
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageFile
 
 
 class Format(StrEnum):
     PNG = "PNG"
     JPEG = "JPEG"
+
+
+class ColorFormat(StrEnum):
+    RGB = "RGB"
+    RGBA = "RGBA"
+
+
+class Channel(IntEnum):
+    R = 0
+    G = 1
+    B = 2
+    A = 3
 
 
 class DPIQuality(IntEnum):
@@ -26,15 +38,37 @@ images = convert_from_path(pdf_path=str(pdf_path), dpi=DPIQuality.DPI_300)
 for i, image in enumerate(images):
     image.save(f"pagina_{i + 1}.{Format.PNG}", format=Format.PNG)
 
-new_image = Image.open("pagina_1.PNG").convert("RGBA")
+
+def get_image(file_name: str) -> ImageFile:
+    return Image.open(file_name)
+
+
+def get_images(files_names: list[str]) -> list[ImageFile]:
+    return [get_image(file_name) for file_name in files_names]
+
+
+def convert_image(image_file: ImageFile, color_format: ColorFormat) -> Image:
+    return image_file.convert(color_format)
+
+
+def convert_images(images: list[ImageFile], color_format: ColorFormat) -> list[Image]:
+    return [convert_image(image_file, color_format) for image_file in images]
+
+
+def get_image_data(image_file: ImageFile) -> list:
+    return image_file.getdata()
+
+
+def get_images_data(image_files: list[ImageFile]) -> list[list]:
+    return [get_image_data(image_file) for image_file in image_files]
+
+
+FILE_NAME = "pagina_1.PNG"
+FILES_NAMES = [FILE_NAME]
+new_image: Image = Image.open(FILE_NAME).convert(ColorFormat.RGBA)
+NEW_IMAGES = [new_image]
 data_image = new_image.getdata()
-
-
-class Channel(IntEnum):
-    R = 0
-    G = 1
-    B = 2
-    A = 3
+DATA_IMAGES = [data_image]
 
 
 TRANSPARENT_PIXEL = (255, 255, 255, 0)
