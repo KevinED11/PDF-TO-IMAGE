@@ -22,7 +22,6 @@ DPI = 300  # Resolución en puntos por pulgada
 images = convert_from_path(pdf_path=str(pdf_path), dpi=DPIQuality.DPI_300)
 
 # Guardar cada página del PDF como una imagen PNG
-[
+for i, image in enumerate(images):
     image.save(f"pagina_{i + 1}.{Format.PNG}", format=Format.PNG)
-    for i, image in enumerate(images)
-]
+
