@@ -19,9 +19,6 @@ pdf_path = Path(
     "/home/kevind/Documentos/datos-personales/firmas_autografas/firma-autografa-digit.pdf"
 )
 
-# Opciones para alta calidad
-DPI = 300  # Resolución en puntos por pulgada
-
 # Convertir PDF a una lista de imágenes
 images = convert_from_path(pdf_path=str(pdf_path), dpi=DPIQuality.DPI_300)
 
